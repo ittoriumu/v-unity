@@ -2,7 +2,25 @@
 
 2人用対戦カードゲーム「Jewels×Duel」の Web 版です。ビルド不要の静的ファイルだけで動きます。
 
-**`index.html` をブラウザで開くだけで遊べます**（`file://` でも、GitHub Pages などの静的ホスティングでも可）。
+<p align="center">
+  <a href="https://ittoriumu.github.io/v-unity/"><img alt="ゲームを遊ぶ" src="https://img.shields.io/badge/%E2%96%B6%20%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E9%81%8A%E3%81%B6-Jewels%C3%97Duel-7a4fd6?style=for-the-badge"></a>
+</p>
+
+## 遊び方
+
+- **オンラインで遊ぶ**：上のボタン（<https://ittoriumu.github.io/v-unity/>）を開くだけです。
+  ※ GitHub Pages を有効にした後に表示されます（有効化は下記）。
+- **手元で遊ぶ**：リポジトリを「Code → Download ZIP」でダウンロードして解凍し、`index.html` をダブルクリックしてブラウザで開きます。
+
+<details>
+<summary>GitHub Pages の有効化手順（リポジトリ管理者向け）</summary>
+
+1. ゲーム一式を `main` ブランチに反映する（プルリクエストをマージ）
+2. リポジトリの **Settings → Pages**
+3. **Build and deployment → Source** を「Deploy from a branch」にし、Branch を `main` / `/ (root)` にして **Save**
+4. 1〜2 分後に <https://ittoriumu.github.io/v-unity/> で公開されます
+
+</details>
 
 ## できること
 
