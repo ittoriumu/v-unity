@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0e1a">
+<title>Jewels×Duel</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-view="title">
+<div id="app">
+  <header id="topbar">
+    <a class="brand" data-go="title" href="#" onclick="return false">◆ Jewels×Duel</a>
+    <nav id="nav">
+      <button data-go="setup">CPU対戦</button>
+      <button data-go="cards">デッキ・図鑑</button>
+      <button data-go="editor">カードエディタ</button>
+      <button data-go="rules">ルール</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ================= TITLE ================= -->
+    <section id="v-title" class="view">
+      <div class="hero">
+        <div class="gems" id="titleGems"></div>
+        <h1>Jewels<span>×</span>Duel</h1>
+        <p class="lead">宝闘者、ジュエリスト。<br>ジュエルから力を得て、その「輝き」――ルミナ――を使役するもの。</p>
+        <div class="hero-btns">
+          <button class="btn primary big" data-go="setup">CPU対戦をはじめる</button>
+          <button class="btn big" data-go="editor">オリジナルカードを作る</button>
+          <button class="btn big" data-go="cards">デッキ構築・カード図鑑</button>
+          <button class="btn big" data-go="rules">ルールを読む</button>
+        </div>
+      </div>
+      <div class="colors-info" id="titleColors"></div>
+      <p class="foot dim">2人用対戦カードゲーム。相手のカードを、10枚トラッシュに落とせば勝ち。</p>
+    </section>
+
+    <!-- ================= SETUP ================= -->
+    <section id="v-setup" class="view">
+      <div class="page">
+        <h2>CPU対戦の準備</h2>
+        <div class="su-cols">
+          <section class="panel"><h3>あなたのデッキ</h3><div id="suMine" class="decklist"></div><button class="btn sm" id="suBuild">デッキを作る／編集する</button></section>
+          <section class="panel"><h3>CPUのデッキ</h3><div id="suCpu" class="decklist"></div></section>
+        </div>
+        <div class="panel su-opts">
+          <div class="opt"><span>CPUの強さ</span><div class="seg" id="suLevel"><button data-v="easy">かんたん</button><button data-v="normal">ふつう</button><button data-v="hard">つよい</button></div></div>
+          <div class="opt"><span>先攻・後攻</span><div class="seg" id="suFirst"><button data-v="random">ランダム</button><button data-v="me">自分が先攻</button><button data-v="cpu">CPUが先攻</button></div></div>
+          <div class="opt"><span>CPUの動作速度</span><div class="seg" id="suSpeed"><button data-v="normal">通常</button><button data-v="fast">高速</button></div></div>
+          <button class="btn primary big" id="suStart">対戦開始</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GAME ================= -->
+    <section id="v-game" class="view">
+      <div class="g-wrap">
+        <div class="g-main">
+          <div class="g-top"><div id="oppInfo" class="oppinfo"></div><div class="g-topbtns"><button id="btnSurrender" class="btn xs">投了</button><button id="btnLeave" class="btn xs">終了</button></div></div>
+          <div id="board" class="board"></div>
+          <div id="promptBar" class="prompt hidden"></div>
+          <div id="turnBar" class="turnbar"></div>
+          <div id="handRow" class="hand"></div>
+        </div>
+        <aside class="g-side">
+          <div id="detail" class="detail"></div>
+          <div id="log" class="log"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= DECK / LIBRARY ================= -->
+    <section id="v-cards" class="view"></section>
+
+    <!-- ================= EDITOR ================= -->
+    <section id="v-editor" class="view"></section>
+
+    <!-- ================= RULES ================= -->
+    <section id="v-rules" class="view">
+      <div class="page rules">
+        <h2>ルール</h2>
+        <section class="panel">
+          <h3>ゲームの目的</h3>
+          <p>相手のカードを、<b>10枚トラッシュに落とす</b>こと。自分のトラッシュが10枚になると敗北します。山札から引けない／トラッシュできなくなった（山札切れ）場合も敗北です。</p>
+          <p class="dim">スペルや破壊されたルミナ、ジュエルからトラッシュへ落ちたカードも枚数に数えます。自分のスペルを使いすぎると、自分が負けに近づきます。</p>
+        </section>
+        <section class="panel">
+          <h3>エリア</h3>
+          <ul>
+            <li><b>場</b>：5レーン。中央の1レーンは特別な<b>ショーケース</b>。自分と相手のレーンは向かい合っています。</li>
+            <li><b>ジュエルエリア</b>：各レーンの手前。カードを縦に重ねて「ジュエル」を貯めます。1枚＝ジュエル1つ、色はそのカードのジュエルカラー。</li>
+            <li><b>山札</b>（30枚・同名カードは3枚まで）／<b>トラッシュ</b>／<b>手札</b>（開始時に5枚）</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h3>ターンの流れ（好きな順序、回数の上限あり）</h3>
+          <table class="rt">
+            <tr><th>セットアップ ×1</th><td>場のルミナを好きな数だけ選んで<b>アップ</b>する。<b>ターンの始め</b>か<b>終わり</b>にのみ可能。<span class="dim">→ 終わりに使うと、アタックしたルミナも立ち直って次の相手ターンの防壁になります。</span></td></tr>
+            <tr><th>ターンドロー ×2</th><td>山札から1枚引く。ただし先攻1ターン目は1回のみ。</td></tr>
+            <tr><th>ジュエルフロー ×3</th><td>手札を1枚、好きなジュエルエリアに置く。</td></tr>
+            <tr><th>ジュエルダウン ×1</th><td>場のカードを好きな枚数、接続するジュエルエリアに移動する。</td></tr>
+            <tr><th>プレイ ×∞</th><td>手札のカードを使う。</td></tr>
+            <tr><th>ジュエルプレイ ×1</th><td>ジュエルエリアのカードを使う（このターンに置いたカードは不可）。</td></tr>
+            <tr><th>アタック ×∞</th><td>アップのルミナで攻撃する（先攻1ターン目は不可）。</td></tr>
+          </table>
+        </section>
+        <section class="panel">
+          <h3>カードの種類とプレイ</h3>
+          <ul>
+            <li><b>ルミナ</b>：場に出す。出すレーンのジュエルエリアに <b>LV枚以上のジュエル</b>と、<b>カラーコスト以上の各色ジュエル</b>が必要（ジュエルは消費しません）。タフネスが0になると「破壊」されトラッシュへ。ダメージは残り続けます。</li>
+            <li><b>スペル</b>：使用後トラッシュへ。<b>全てのジュエルエリアの合計</b>でLV・カラーコストを満たす必要があります。</li>
+            <li><b>ステージ</b>：ショーケースにのみ出せる。上のルミナを強化する永続効果。全ジュエルエリアの合計で判定。</li>
+            <li><b>ジュエルプレイ</b>：置かれていたジュエルエリアに接続する場にのみ出せます。LV・コストは、そのカードが動く前（自身を含む）の状態で判定します。</li>
+            <li>出したルミナは、そのターンは<b>ステージフリーズ</b>でアタックできません。</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h3>アタック</h3>
+          <ul>
+            <li>アップのルミナをダウンさせ、<b>相対するレーン</b>へ攻撃します。</li>
+            <li>相手の<b>アップ</b>のルミナがいる → そのルミナへ「ルミナアタック」。</li>
+            <li>相手の<b>ダウン</b>のルミナがいる → ルミナアタックか、相手への「ダイレクトアタック」を選べる。</li>
+            <li>相手のルミナがいない → ダイレクトアタック。</li>
+            <li>ルミナアタック：パワー分のダメージを与える（反撃はありません）。ダイレクトアタック：パワー分、相手は山札の上からトラッシュ。</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h3>ショーケース</h3>
+          <ul>
+            <li>そこにいるルミナは<b>パワーとタフネスが2倍</b>。効果はすべて2回起こります。ステージを置けるのもここだけ。</li>
+            <li>効果でショーケースが移動／増加することがあります（最大3レーン）。移動すると、元のステージは破壊され、ルミナの能力は元に戻ります。受けていたダメージはそのまま残ります。</li>
+            <li>ショーケースに接続するジュエルエリアには、<b>1ターンに1枚</b>しか置けません（2枚目以降は代わりにトラッシュ）。</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h3>6つのジュエルカラー</h3>
+          <p>シアン：山札・手札／マゼンタ：場・アタック・ダメージ／イエロー：パワー・タフネス・バフ／グリーン：ジュエルゾーン／ブラック：トラッシュ・ライフ／ホワイト：染色・移動<br>
+          <span class="dim">ホワイトの「染色」は、ジュエルエリアのカードを別の色として扱う効果です。</span></p>
+        </section>
+        <section class="panel">
+          <h3>オリジナルカード</h3>
+          <p>「カードエディタ」で、ブロックを組み合わせて効果を作れます。コストは2通り。</p>
+          <ul>
+            <li><b>自動</b>：ステータスと効果の価値からLV・カラーコストを自動設定。他の色の得意分野のブロックを使うと、その色のコストも必要になります。強すぎる効果は作れません。</li>
+            <li><b>自由</b>：LVとカラーコストを好きに決められます（バランス評価は参考表示）。</li>
+          </ul>
+          <p>イラストは、ファイル選択・ドラッグ＆ドロップ・クリップボード貼り付けで取り込めます。作ったカードは、デッキ構築で使え、CPU戦でも遊べます。データはこのブラウザに保存されます。</p>
+        </section>
+        <section class="panel">
+          <h3>このアプリでの解釈（原文が明記していない部分）</h3>
+          <ul>
+            <li>山札切れ＝山札から引く／トラッシュする必要があるのに1枚も無い時に敗北。両者が同時に10枚に達した場合は、ターンプレイヤーの勝ち。</li>
+            <li>1レーンにルミナは1体まで。ステージは置き換え可能（古いステージは破壊）。</li>
+            <li>ジュエルダウンで戻したルミナ・ステージも、そのターンはジュエルプレイできません。</li>
+            <li>染色（ブロック）は「そのカードを指定色に置き換える」、ジュエル常時効果の染色は「元の色に加えて指定色としても扱う」です。</li>
+          </ul>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal hidden"><div id="modalBox" class="modal-box"><button id="modalX" class="mx" aria-label="閉じる">×</button><div id="modalBody"></div></div></div>
+  <div id="toast"></div>
+  <div id="fxLayer"></div>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/deck.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
